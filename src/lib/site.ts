@@ -9,8 +9,8 @@ export const SITE = {
   email: 'weeratheprattanajaratkul@gmail.com',
   linkedin: 'https://www.linkedin.com/in/weerathep-rat/',
   linkedinLabel: 'linkedin.com/in/weerathep-rat',
-  resume: 'resume.pdf',
-  resumeDownloadName: 'Weerathep-Rattanajaratkul-CV.pdf',
+  /** live CV on Canva: edits there show up on the site immediately */
+  resume: 'https://canva.link/56urtxu75fzcmrq',
   locale: 'en',
 } as const;
 

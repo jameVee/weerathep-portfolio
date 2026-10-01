@@ -1,25 +1,41 @@
 ---
 import { education } from '../data/education';
+import WorkGallery from './WorkGallery.astro';
 
 const pct = (v: number, s: number) => `${((v / s) * 100).toFixed(2)}%`;
 ---
-<section id="education">
+<section id="education" class="tone" data-accent="sky" data-cool="teal">
   <div class="sec-head">
     <h2>Education</h2>
   </div>
   <div class="edu">
     {education.map((e) => (
-      <div class="school">
-        <div class="eyebrow mono">{e.dates}</div>
-        <div class="deg">{e.degree}</div>
-        <div class="where">{e.school}</div>
-        {e.gpa && (
-          <div class="gpa">
-            <span class="mono">{e.gpa.label ?? 'GPA'} {e.gpa.value.toFixed(2)} / {e.gpa.scale.toFixed(2)}</span>
-            <div class="bar" aria-hidden="true"><i style={`--fill:${pct(e.gpa.value, e.gpa.scale)}`}></i></div>
-          </div>
+      <div class:list={['school', { 'has-media': e.images?.length }]}>
+        {e.images && e.images.length > 0 && (
+          <WorkGallery images={e.images} label="Photo" sizes="(max-width: 820px) calc(100vw - 40px), 510px" />
         )}
-        <ul>{e.honours.map((h) => <li>{h}</li>)}</ul>
+        <div class="school-body">
+          <div class="eyebrow mono">{e.dates}</div>
+          <div class="deg">{e.degree}</div>
+          <div class="where">{e.school}</div>
+          {e.gpa && (
+            <div class="gpa">
+              <span class="mono">{e.gpa.label ?? 'GPA'} {e.gpa.value.toFixed(2)} / {e.gpa.scale.toFixed(2)}</span>
+              <div class="bar" aria-hidden="true"><i style={`--fill:${pct(e.gpa.value, e.gpa.scale)}`}></i></div>
+            </div>
+          )}
+          <ul>{e.honours.map((h) => <li>{h}</li>)}</ul>
+          {e.videos && e.videos.length > 0 && (
+            <div class="vids">
+              {e.videos.map((v) => (
+                <a class="vid" href={v.url} target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" /></svg>
+                  {v.label}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     ))}
   </div>

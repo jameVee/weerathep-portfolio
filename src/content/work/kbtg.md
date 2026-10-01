@@ -13,5 +13,8 @@ cool: indigo
 tags: [Python, Scikit-learn, Predictive maintenance]
 order: 3
 illustration: machine-failure
-artLabel: Illustration
+images:
+  - src: ./images/kbtg-1.png
+    alt: "Pipeline: master data, device event, call and incident logs feed XGBoost and ANN models, which produce an incident predictive report for vendor preventive maintenance."
+artLabel: Pipeline
 ---

@@ -36,12 +36,19 @@ const back = url('#projects');
           <h1>{d.title}</h1>
           <p class="lede">{d.summary}</p>
           <Chips tags={d.tags} />
-          {d.github && (
+          {d.highlight && <p class="hl">{d.highlight}</p>}
+          {(d.github || d.links.length > 0) && (
             <div class="actions">
-              <a class="btn ghost" href={d.github} target="_blank" rel="noopener">
+              {d.github && <a class="btn ghost" href={d.github} target="_blank" rel="noopener">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path class="s-ink" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
                 View on GitHub
-              </a>
+              </a>}
+              {d.links.map((l) => (
+                <a class="btn ghost" href={l.url} target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" fill="none" class="k-ink" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  {l.label}
+                </a>
+              ))}
             </div>
           )}
         </header>
@@ -64,7 +71,7 @@ const back = url('#projects');
           <section class="gallery" aria-label="Photos">
             {d.gallery.map((g) => (
               <figure>
-                <div class="art has-photo">
+                <a class="art has-photo" href={g.src.src} data-zoom aria-label={`Zoom photo: ${g.alt}`}>
                   <Image
                     src={g.src}
                     alt={g.alt}
@@ -73,7 +80,7 @@ const back = url('#projects');
                     loading="lazy"
                     decoding="async"
                   />
-                </div>
+                </a>
                 {g.caption && <figcaption>{g.caption}</figcaption>}
               </figure>
             ))}
@@ -82,7 +89,9 @@ const back = url('#projects');
 
         <div class="pfoot">
           <a class="back" href={back}><span aria-hidden="true">←</span> Back to all projects</a>
-          {d.github && <a class="btn ghost" href={d.github} target="_blank" rel="noopener">View on GitHub</a>}
+          {(d.github ?? d.links[0]?.url) && (
+            <a class="btn ghost" href={d.github ?? d.links[0].url} target="_blank" rel="noopener">{d.github ? 'View on GitHub' : d.links[0].label}</a>
+          )}
         </div>
       </article>
       <Footer />

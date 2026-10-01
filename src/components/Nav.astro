@@ -19,8 +19,35 @@ const links = [
 <nav class="nav" aria-label="Main">
   <div class="wrap">
     <a class="brand" href={onHome ? '#top' : url('')}>{SITE.shortName}<span>.</span></a>
-    <ul>
+    <ul class="nav-links">
       {links.map(([id, label]) => <li><a href={href(id)}>{label}</a></li>)}
     </ul>
+    <!-- phones and small tablets: the same links behind a Menu button -->
+    <details class="menu">
+      <summary>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        Menu
+      </summary>
+      <ul class="menu-list">
+        {links.map(([id, label]) => <li><a href={href(id)}>{label}</a></li>)}
+      </ul>
+    </details>
   </div>
 </nav>
+
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>('.nav .menu');
+  if (menu) {
+    // close after choosing a section, on Esc, or when tapping elsewhere
+    menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => (menu.open = false)));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.open) {
+        menu.open = false;
+        menu.querySelector('summary')?.focus();
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (menu.open && !menu.contains(e.target as Node)) menu.open = false;
+    });
+  }
+</script>

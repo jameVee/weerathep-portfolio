@@ -27,7 +27,7 @@ const awards = (await getCollection('awards')).sort(byOrder);
       <Facts />
       <Journey />
 
-      <section id="work">
+      <section id="work" class="tone" data-accent="teal" data-cool="violet">
         <div class="sec-head">
           <h2>Work experience</h2>
           <p>Each role, with the problem, what I built and what changed. Open “Read more” for detail.</p>
@@ -37,17 +37,17 @@ const awards = (await getCollection('awards')).sort(byOrder);
         </div>
       </section>
 
-      <section id="projects">
+      <section id="projects" class="tone" data-accent="violet" data-cool="sky">
         <div class="sec-head">
           <h2>Projects</h2>
-          <p>Research and coursework at Skoltech.</p>
+          <p>Research, shared tasks and coursework. Open a project for the full write-up and links.</p>
         </div>
         <div class="grid3">
           {projects.map((project) => <ProjectCard project={project} />)}
         </div>
       </section>
 
-      <section id="awards">
+      <section id="awards" class="tone" data-accent="coral" data-cool="gold">
         <div class="sec-head">
           <h2>Competitions &amp; hackathons</h2>
           <p>Building under a deadline, with a team, in front of judges.</p>

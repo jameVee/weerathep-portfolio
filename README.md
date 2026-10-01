@@ -8,11 +8,11 @@ src/
   content/projects/    one .md per project      → project cards + /projects/<file-name>/
   content/awards/      one .md per competition  → "Competitions & hackathons"
   data/                journey.ts, education.ts, skills.ts, facts.ts, beyond.ts
-  assets/me.jpg        your photo (hero)
+  assets/me.png        your photo (hero)
+  content/work/images/ screenshots for the work cards
   components/          Nav, Hero, WorkCard, ProjectCard, AwardCard, ...
   components/illustrations/   the SVG drawings, one component each
   styles/global.css    all styles and colour tokens
-public/resume.pdf      the "Download CV" file
 design/original-index.html   the original single-file design, kept for reference
 ```
 
@@ -50,10 +50,14 @@ accent: gold            # gold | indigo | coral | teal | violet | sky
 cool: indigo
 tags: [Python, PyTorch, A/B testing]
 order: 1
-illustration: two-tier-validation   # or use image + imageAlt below
-artLabel: System diagram
-# image: ./images/acme.jpg
-# imageAlt: The ranking dashboard on a laptop
+artLabel: System diagram           # small label in the picture's corner
+images:                             # one or more; 2+ images get ← / → buttons
+  - src: ./images/acme-1.png        # path relative to this .md file
+    alt: Architecture of the ranking service
+  - src: ./images/acme-2.png
+    alt: A/B test results dashboard
+    label: Dashboard                # optional, overrides artLabel for this image
+# illustration: two-tier-validation # used instead when there are no images
 ---
 
 - These bullets appear under "Read more".
@@ -107,8 +111,14 @@ place: Kaggle competition          # the grey line under the title
 badge: "5%"                        # up to 4 characters fit in the medal: "1st", "10", "48h"
 detail: Silver medal               # the result
 date: "2027"                       # optional, shown after the result
-accent: gold                       # gold medals use gold, others indigo
+accent: gold                       # gold | indigo | coral | teal | violet | sky
 order: 5
+images:                            # optional photos / certificates; 2+ get arrow buttons
+  - src: ./images/kaggle-1.jpg     # put files in src/content/awards/images/
+    alt: The team with the silver medal certificate
+    label: Certificate             # small label in the corner
+video: https://www.youtube.com/watch?v=...   # optional; adds a play button
+videoLabel: Watch our pitch
 ---
 ```
 
@@ -118,9 +128,11 @@ Edit the arrays in `src/data/`: `journey.ts` (timeline, mark the latest stop wit
 
 ## 3. Photos
 
-**Your portrait:** replace `src/assets/me.jpg` with your photo, keeping the same name. A 4:3 landscape crop of at least 960 px wide works best; the face sits slightly above centre. Astro resizes it, converts it to WebP and serves the right size per screen. `.jpeg`, `.png` and `.webp` also work. If you delete the file, the site falls back to the built-in "Your photo here" placeholder.
+**Your portrait:** replace `src/assets/me.png` with your photo (`me.jpg`, `.jpeg` or `.webp` also work; keep only one). It is shown whole, uncropped, so any shape works; around 700–1000 px wide is plenty. Astro resizes it, converts it to WebP and serves the right size per screen. If you delete the file, the site falls back to the built-in "Your photo here" placeholder.
 
-**Project and job photos:** put images next to the content, e.g. `src/content/projects/images/graph-rag/cover.jpg`, and reference them with a path relative to the `.md` file:
+**Work images:** put them in `src/content/work/images/` (e.g. `genotek-2.png`) and add them under `images:` in that job's file, as in the example above. The first one shows by default; with two or more, the card shows arrow buttons and a 1 / N counter. Clicking an image opens it full size. Diagrams and screenshots are shown whole, never cropped.
+
+**Project photos:** put images next to the content, e.g. `src/content/projects/images/graph-rag/cover.jpg`, and reference them with a path relative to the `.md` file:
 
 ```yaml
 image: ./images/graph-rag/cover.jpg
@@ -129,7 +141,7 @@ imageAlt: What the photo shows, for screen readers
 
 The photo replaces the illustration in the same card frame, with a thin accent-coloured bar along the bottom. Use `gallery:` (see the project example above) for extra photos on the project page. They load lazily and are resized automatically. `imageAlt` / `alt` are required, and the build stops if they're missing.
 
-**Your CV:** replace `public/resume.pdf`. The one there now is generated from the site's content, so swap in your own when it's ready.
+**Your CV:** the "Download CV" button opens your CV on Canva (link in `src/lib/site.ts`, field `resume`). Edit the design in Canva and the site shows the new version straight away, with no rebuild needed.
 
 ## 4. Deploy
 
@@ -159,4 +171,5 @@ The workflow sets the right `site` and `base` (`https://<user>.github.io/<repo>/
 
 - Fonts (Bricolage Grotesque, Public Sans, JetBrains Mono) are self-hosted from npm through Fontsource, so there are no requests to Google.
 - The social preview images (`/og-image.png`, `/og/<project>.png`) and the favicons are generated at build time by `src/lib/og.ts`. Change the text or colours there.
+- The site uses the black theme for every visitor. Each section and card picks colours from the named tones; the light palette is still in `global.css` under `[data-theme="light"]` if you ever want it.
 - Colours are CSS custom properties in `src/styles/global.css`. A card's `accent` / `cool` fields pick one of the named tones (`gold`, `indigo`, `coral`, `teal`, `violet`, `sky`), and each has a light and a dark value.

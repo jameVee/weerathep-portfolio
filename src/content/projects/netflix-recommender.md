@@ -1,21 +1,23 @@
 ---
 title: Movie recommender on the Netflix Prize dataset
-summary: Matrix factorization with Alternating Least Squares, with pipelines that produce top-10 personalized recommendations for warm-start and hot-start users.
-tags: [Recommender systems, ALS]
-accent: gold
-cool: indigo
-order: 3
+summary: An implicit-feedback collaborative filtering recommender trained with ALS, tuned with Optuna and evaluated with ranking metrics.
+tags: [Recommender systems, ALS, Optuna]
+accent: coral
+cool: violet
+order: 4
 illustration: rating-matrix
+github: https://github.com/jameVee/Collaborative-Filtering-Based-Movie-Recommendation-System-Netflix-Prize-Dataset-
 ---
 
-## The problem
+## Overview
 
-The Netflix Prize data is a huge, very sparse user-by-movie rating matrix: most users have rated only a tiny share of the catalogue. A recommender has to fill in the missing cells well enough to rank the movies each user hasn't seen.
+A notebook-based recommender systems project that builds and evaluates an **implicit-feedback collaborative filtering** model on data from the Netflix Prize dataset.
 
-## What I built
+## Workflow
 
-- **Matrix factorization with Alternating Least Squares (ALS)**, which learns a short vector for every user and every movie and predicts a rating from their dot product.
-- **Recommendation pipelines** that turn the predicted ratings into a **top-10 list** per user.
-- Separate handling for **warm-start** users, who already have history in the training data, and **hot-start** users, who arrive with only a few fresh ratings.
-
-*Coursework at Skoltech.*
+1. Parse user–movie interactions from the Netflix ratings files.
+2. Prepare train/test splits with warm-start evaluation.
+3. Train an **ALS (Alternating Least Squares)** recommender.
+4. Tune hyperparameters with **Optuna**.
+5. Evaluate with ranking metrics.
+6. Generate movie recommendations for a sample user profile.

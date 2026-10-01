@@ -3,6 +3,7 @@ import '../styles/global.css';
 import displayFont from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-opsz-normal.woff2?url';
 import bodyFont from '@fontsource-variable/public-sans/files/public-sans-latin-wght-normal.woff2?url';
 import { SITE, url, absoluteUrl } from '../lib/site';
+import Lightbox from '../components/Lightbox.astro';
 
 interface Props {
   title?: string;
@@ -51,8 +52,7 @@ const person = {
     <link rel="icon" href={url('favicon.ico')} sizes="32x32" />
     <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
     <link rel="apple-touch-icon" href={url('apple-touch-icon.png')} />
-    <meta name="theme-color" content="#F2F4F6" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0D131A" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#08090C" />
     <link rel="sitemap" href={url('sitemap-index.xml')} />
 
     <meta property="og:type" content={type} />
@@ -76,5 +76,6 @@ const person = {
   <body>
     <a class="skip" href="#top">Skip to content</a>
     <slot />
+    <Lightbox />
   </body>
 </html>

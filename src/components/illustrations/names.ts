@@ -10,6 +10,9 @@ export const ILLUSTRATIONS = [
   'hallucination-span',
   'point-cloud-pruning',
   'rating-matrix',
+  'multilingual-spans',
+  'gridworld-policy',
+  'pump-status',
 ] as const;
 export type IllustrationName = (typeof ILLUSTRATIONS)[number];
 

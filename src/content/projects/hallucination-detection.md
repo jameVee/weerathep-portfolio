@@ -1,25 +1,32 @@
 ---
 title: Hallucination detection in tool-calling dialogues
-summary: End-to-end pipeline that generates synthetic annotated data, compares BERT- and attention-based baselines, and trains a span-level classifier that beat existing methods across three hallucination categories.
-tags: [LLMs, BERT, Synthetic data]
-accent: gold
-cool: indigo
-order: 1
+summary: Span-level detection and classification of hallucinations in LLM answers that use tool calls, with new datasets and a model that beat both baselines.
+highlight: Outperformed both baselines on all three hallucination types
+tags: [LLMs, Span classification, ToolACE, Hugging Face]
+accent: sky
+cool: violet
+order: 2
 illustration: hallucination-span
+github: https://github.com/hrbaruri/Hallucination-Detection
+links:
+  - label: Datasets on Hugging Face
+    url: https://huggingface.co/datasets/jameVee/ToolACE-Hallucination
+  - label: Detector model on Hugging Face
+    url: https://huggingface.co/jameVee/ToolACE-Hallucination-Detector
 ---
 
 ## The problem
 
-When an LLM agent calls a tool, a single wrong argument, such as a city the user never mentioned, can send the whole conversation in the wrong direction. Flagging the whole answer as "hallucinated" isn't precise enough to act on. We wanted to find the exact **span** inside the tool call that isn't supported by the dialogue.
+AI assistants increasingly answer by calling tools. When the final answer doesn't match what the tools returned, the assistant becomes unreliable in ways that are hard to spot. We built a pipeline for detecting and classifying these hallucinations at the span level.
 
-## What I built
+## What my teammates and I did
 
-- **Synthetic, annotated data.** A generator that produces tool-calling dialogues and marks which spans of each call are grounded and which are hallucinated, so there was labelled data to train and evaluate on.
-- **Baselines.** BERT-based and attention-based detectors, run on the same data so the comparison is fair.
-- **A span-level classifier** that points to the hallucinated part of a tool call, trained on the synthetic set.
+- **Built three annotated datasets** from the ToolACE dialogue corpus by programmatically injecting span-level hallucinations of three types:
+  - **Tool output contradictions:** the model states facts that conflict with the tool's response.
+  - **Overgeneration:** the model adds information that isn't in the tool output.
+  - **Missing tool references:** the model suggests actions that need tools it doesn't have.
+- **Formatted every dataset in a RAGTruth-compatible schema**, so it works with existing evaluation frameworks.
+- **Evaluated two baseline detectors:** LettuceDetect (BERT-based token classification) and LookBackLens (an attention-signal-based LLM classifier).
+- **Trained an improved span classification model** that outperformed both baselines on all three hallucination types.
 
-## Result
-
-The span-level classifier beat the existing methods across all three hallucination categories we evaluated.
-
-*Research project at Skoltech.*
+The datasets and the detector model are published on Hugging Face (links above).

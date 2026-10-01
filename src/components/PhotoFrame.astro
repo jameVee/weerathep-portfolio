@@ -20,7 +20,7 @@ const photo = Object.values(found)[0];
         src={photo}
         alt={`Portrait of ${SITE.name}`}
         widths={[320, 480, 640, 800, 960].filter((w) => w <= photo.width)}
-        sizes="(max-width: 900px) calc(100vw - 120px), 360px"
+        sizes="(max-width: 900px) calc(100vw - 40px), 440px"
         loading="eager"
         fetchpriority="high"
         decoding="async"

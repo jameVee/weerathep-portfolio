@@ -1,12 +1,26 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import WorkGallery from './WorkGallery.astro';
 
 interface Props { award: CollectionEntry<'awards'> }
 const { award } = Astro.props;
 const d = award.data;
 const when = [d.detail, d.date].filter(Boolean).join(' · ');
 ---
-<div class="award tone" data-accent={d.accent}>
-  <div class="medal" aria-hidden="true">{d.badge}</div>
-  <div><h3>{d.title}</h3><p>{d.place}</p><div class="when">{when}</div></div>
+<div class="award tone" data-accent={d.accent} data-cool={d.accent}>
+  {d.images.length > 0 && (
+    <WorkGallery images={d.images} label="Photo" sizes="(max-width: 720px) calc(100vw - 40px), 520px" />
+  )}
+  <div class="award-row">
+    <div class="medal" aria-hidden="true">{d.badge}</div>
+    <div>
+      <h3>{d.title}</h3><p>{d.place}</p><div class="when">{when}</div>
+      {d.video && (
+        <a class="vid" href={d.video} target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" /></svg>
+          {d.videoLabel}
+        </a>
+      )}
+    </div>
+  </div>
 </div>

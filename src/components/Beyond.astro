@@ -1,13 +1,27 @@
 ---
+import { Image } from 'astro:assets';
 import { beyond } from '../data/beyond';
 ---
-<div>
+<div class="tone" data-accent="coral" data-cool="sky">
   <div class="sec-head"><h2>Beyond work</h2></div>
   <div class="list">
     {beyond.map((b) => (
       <div class="item">
         <div class="when">{b.when}</div>
-        <div><h3>{b.title}</h3><p>{b.text}</p></div>
+        <div>
+          <h3>{b.title}</h3><p>{b.text}</p>
+          {b.images && b.images.length > 0 && (
+            <ul class="thumbs">
+              {b.images.map((img) => (
+                <li>
+                  <a href={img.src.src} data-zoom aria-label={`Zoom photo: ${img.alt}`}>
+                    <Image src={img.src} alt={img.alt} width={176} quality={70} loading="lazy" decoding="async" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     ))}
   </div>

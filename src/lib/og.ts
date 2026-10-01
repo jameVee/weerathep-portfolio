@@ -18,17 +18,20 @@ const h = (type: string, style: Record<string, unknown>, ...children: Child[]): 
   props: { style: { display: 'flex', ...style }, children },
 });
 
-/* light palette from global.css */
+/* black palette from global.css */
 const C = {
-  bg: '#F2F4F6',
-  surface: '#FFFFFF',
-  ink: '#122034',
-  muted: '#566275',
-  line: '#D9DFE6',
-  gold: '#B57A00',
-  goldSoft: '#FBEFD2',
-  goldBright: '#F0B43A',
-  black: '#0D131A',
+  bg: '#08090C',
+  surface: '#11141A',
+  ink: '#ECEFF4',
+  muted: '#9AA4B2',
+  line: '#232833',
+  gold: '#F5B83D',
+  goldSoft: '#2A2210',
+  goldBright: '#F5B83D',
+  coral: '#FF7A59',
+  violet: '#A78BFA',
+  teal: '#2DD4BF',
+  black: '#08090C',
 };
 
 const fontFile = (pkg: string, file: string) =>
@@ -69,24 +72,39 @@ const brand = () =>
 const eyebrow = (text: string) =>
   h('div', { fontFamily: 'JetBrains Mono', fontSize: 22, letterSpacing: 2, color: C.muted, textTransform: 'uppercase' }, text);
 
-/** The site-wide 1200×630 card: name, role and the route card. */
-export function homeOgImage(): Promise<Buffer> {
-  const node = h('div', { width: 1200, height: 630, background: C.bg, padding: '56px 72px', flexDirection: 'column', justifyContent: 'space-between', fontFamily: 'Public Sans' },
-    brand(),
-    h('div', { alignItems: 'center', justifyContent: 'space-between' },
-      h('div', { flexDirection: 'column', width: 640 },
-        eyebrow('Engineer · Machine learning systems'),
-        h('div', { fontFamily: 'Bricolage', fontWeight: 800, fontSize: 92, lineHeight: 1, letterSpacing: -3, color: C.ink, marginTop: 22 }, 'Weerathep'),
-        h('div', { fontFamily: 'Bricolage', fontWeight: 500, fontSize: 92, lineHeight: 1.05, letterSpacing: -3, color: C.muted }, 'Rattanajaratkul'),
-        h('div', { fontSize: 26, lineHeight: 1.45, color: C.muted, marginTop: 26 }, 'Machine learning systems that leave the notebook and run in production.'),
-      ),
-      h('div', { flexDirection: 'column', background: C.surface, border: `2px solid ${C.line}`, borderRadius: 22, padding: 26, width: 400 },
+/** src/assets/me.* as a JPEG data URI, or undefined if there is no photo. */
+async function portrait(w: number, hgt: number): Promise<string | undefined> {
+  const dir = path.join(process.cwd(), 'src', 'assets');
+  const file = fs.existsSync(dir) ? fs.readdirSync(dir).find((n) => /^me\.(jpe?g|png|webp|avif)$/i.test(n)) : undefined;
+  if (!file) return undefined;
+  const buf = await sharp(path.join(dir, file)).resize(w * 2, hgt * 2, { fit: 'cover', position: 'top' }).jpeg({ quality: 82 }).toBuffer();
+  return `data:image/jpeg;base64,${buf.toString('base64')}`;
+}
+
+const RAINBOW = `linear-gradient(135deg, ${C.gold}, ${C.coral} 35%, ${C.violet} 70%, ${C.teal})`;
+
+/** The site-wide 1200×630 card: name, role and your photo (or the route card if there is no photo). */
+export async function homeOgImage(): Promise<Buffer> {
+  const photo = await portrait(340, 380);
+  const side = photo
+    ? h('div', { padding: 4, borderRadius: 26, backgroundImage: RAINBOW },
+        { type: 'img', props: { src: photo, width: 340, height: 380, style: { borderRadius: 22 } } })
+    : h('div', { flexDirection: 'column', background: C.surface, border: `2px solid ${C.line}`, borderRadius: 22, padding: 26, width: 400 },
         { type: 'img', props: { src: routeSvg(), width: 348, height: 213 } },
         h('div', { justifyContent: 'space-between', marginTop: 10, fontFamily: 'Bricolage', fontWeight: 800, fontSize: 24, color: C.ink },
-          h('span', {}, 'Bangkok'), h('span', {}, 'Moscow')),
+          h('span', {}, 'Bangkok'), h('span', {}, 'Moscow')));
+  const node = h('div', { width: 1200, height: 630, background: C.bg, padding: '56px 72px', alignItems: 'center', justifyContent: 'space-between', fontFamily: 'Public Sans' },
+    h('div', { flexDirection: 'column', justifyContent: 'space-between', height: 518, width: 680 },
+      brand(),
+      h('div', { flexDirection: 'column' },
+        eyebrow('Engineer · Machine learning systems'),
+        h('div', { fontFamily: 'Bricolage', fontWeight: 800, fontSize: 88, lineHeight: 1, letterSpacing: -3, color: C.ink, marginTop: 22 }, 'Weerathep'),
+        h('div', { fontFamily: 'Bricolage', fontWeight: 500, fontSize: 88, lineHeight: 1.05, letterSpacing: -3, backgroundImage: `linear-gradient(90deg, ${C.gold}, ${C.coral} 45%, ${C.violet})`, backgroundClip: 'text', color: 'transparent' }, 'Rattanajaratkul'),
+        h('div', { fontSize: 26, lineHeight: 1.45, color: C.muted, marginTop: 24 }, 'Machine learning systems that leave the notebook and run in production.'),
       ),
+      h('div', { height: 6, width: 160, backgroundImage: RAINBOW, borderRadius: 3 }),
     ),
-    h('div', { height: 6, width: 120, background: C.gold, borderRadius: 3 }),
+    side,
   );
   return toPng(node, 1200, 630);
 }
@@ -105,7 +123,7 @@ export function projectOgImage(p: { title: string; summary: string; tags: string
         ...p.tags.slice(0, 4).map((t) =>
           h('div', { fontFamily: 'JetBrains Mono', fontSize: 20, color: C.muted, background: C.surface, border: `2px solid ${C.line}`, borderRadius: 8, padding: '6px 14px' }, t)),
       ),
-      h('div', { height: 6, width: 120, background: C.gold, borderRadius: 3 }),
+      h('div', { height: 6, width: 160, backgroundImage: `linear-gradient(90deg, ${C.gold}, ${C.coral}, ${C.violet}, ${C.teal})`, borderRadius: 3 }),
     ),
   );
   return toPng(node, 1200, 630);

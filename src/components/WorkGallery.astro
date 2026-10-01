@@ -1,0 +1,80 @@
+---
+/**
+ * Picture panel of a work card. Shows the job's images one at a time with ← / → buttons
+ * (the buttons and counter appear once there are 2+ images). Clicking an image opens it full size.
+ * With no images it falls back to the job's SVG illustration.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { illustrations } from './illustrations/index';
+import type { IllustrationName } from './illustrations/names';
+
+interface Props {
+  images: { src: ImageMetadata; alt: string; label?: string | undefined }[];
+  illustration?: IllustrationName | undefined;
+  label: string;
+  /** `sizes` attribute for the responsive images */
+  sizes?: string;
+}
+const { images, illustration, label, sizes = "(max-width: 820px) calc(100vw - 40px), 430px" } = Astro.props;
+const Illustration = illustration ? illustrations[illustration] : undefined;
+const many = images.length > 1;
+const widths = (w: number) => [480, 720, 960, 1280].filter((x) => x <= w);
+---
+{images.length === 0 ? (
+  <div class="art">
+    {Illustration && <Illustration />}
+    <span class="tag">{label.toUpperCase()}</span>
+  </div>
+) : (
+  <div class="art shots" data-carousel>
+    {images.map((img, i) => (
+      <figure class="slide" hidden={i > 0} data-label={(img.label ?? label).toUpperCase()}>
+        <a href={img.src.src} data-zoom aria-label={`Zoom image: ${img.alt}`}>
+          <Image
+            src={img.src}
+            alt={img.alt}
+            widths={widths(img.src.width).length ? widths(img.src.width) : [img.src.width]}
+            sizes={sizes}
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+      </figure>
+    ))}
+    <span class="tag" data-tag>{(images[0].label ?? label).toUpperCase()}</span>
+    {many && (
+      <div class="shot-nav">
+        <button type="button" class="shot-btn" data-dir="-1" aria-label="Previous image">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+        </button>
+        <span class="shot-count mono" aria-live="polite"><span data-i>1</span> / {images.length}</span>
+        <button type="button" class="shot-btn" data-dir="1" aria-label="Next image">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+        </button>
+      </div>
+    )}
+  </div>
+)}
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-carousel]')) {
+    const slides = [...root.querySelectorAll<HTMLElement>('.slide')];
+    const counter = root.querySelector('[data-i]');
+    const tag = root.querySelector('[data-tag]');
+    let current = 0;
+    const show = (i: number) => {
+      current = (i + slides.length) % slides.length;
+      slides.forEach((s, n) => (s.hidden = n !== current));
+      if (counter) counter.textContent = String(current + 1);
+      if (tag) tag.textContent = slides[current].dataset.label ?? '';
+    };
+    root.querySelectorAll<HTMLButtonElement>('.shot-btn').forEach((btn) =>
+      btn.addEventListener('click', () => show(current + Number(btn.dataset.dir))),
+    );
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(current - 1);
+      if (e.key === 'ArrowRight') show(current + 1);
+    });
+  }
+</script>

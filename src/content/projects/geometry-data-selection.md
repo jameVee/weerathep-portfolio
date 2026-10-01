@@ -1,25 +1,22 @@
 ---
 title: Geometry-based data selection
-summary: Intrinsic Dimensionality scoring and sample selection inside a data-pruning pipeline, removing redundant samples while keeping model performance.
+summary: Data pruning with geometric and statistical scores, showing that a large share of training data can be removed without hurting accuracy.
 tags: [Data pruning, Intrinsic dimension]
-accent: gold
-cool: indigo
-order: 2
+accent: teal
+cool: gold
+order: 3
 illustration: point-cloud-pruning
+github: https://github.com/AndreyMymrin/Geometry-Based-Data-Selection-ML-project-
 ---
 
-## The problem
+## The idea
 
-Large training sets often contain many samples that teach the model almost nothing new. Training on all of them costs time and compute. The question was whether the **geometry** of the data can tell us which samples are redundant.
+Not every training sample is worth keeping. This project scores each sample by its **difficulty or redundancy** using geometric and statistical methods, removes the easiest or most redundant ones, retrains the models on the reduced dataset and measures the effect on performance.
 
-## What I built
+## My part
 
-- **Intrinsic Dimensionality scoring**, used as a signal for how much new structure a sample adds to the dataset.
-- **Sample selection** that uses these scores to decide which samples to keep.
-- Both pieces plugged into a **data-pruning pipeline**, so a pruned dataset can be compared directly with the full one.
+I implemented the **Intrinsic Dimensionality (ID)–based method** for scoring and selecting samples.
 
 ## Result
 
-The pipeline removes redundant samples while keeping model performance.
-
-*Coursework at Skoltech.*
+A significant portion of the training data can be removed without degrading model accuracy.

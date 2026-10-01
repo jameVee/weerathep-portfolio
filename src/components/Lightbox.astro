@@ -1,0 +1,43 @@
+---
+/**
+ * Image zoom. Any link with `data-zoom` (pointing at the full-size image) opens here
+ * instead of a new page. Click anywhere, press Esc or use × to close.
+ * Without JavaScript the link still works and opens the image directly.
+ */
+---
+<dialog class="zoom" aria-label="Image viewer">
+  <button type="button" class="zoom-close" aria-label="Close image">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+  </button>
+  <figure>
+    <img alt="" />
+    <figcaption></figcaption>
+  </figure>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('dialog.zoom');
+  const img = dialog?.querySelector('img');
+  const caption = dialog?.querySelector('figcaption');
+  let opener: HTMLElement | null = null;
+
+  if (dialog && img && caption) {
+    document.addEventListener('click', (e) => {
+      const link = (e.target as Element | null)?.closest<HTMLAnchorElement>('a[data-zoom]');
+      if (!link || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      const thumb = link.querySelector('img');
+      img.src = link.href;
+      img.alt = thumb?.alt ?? '';
+      caption.textContent = thumb?.alt ?? '';
+      opener = link;
+      dialog.showModal();
+    });
+    // any click (on the picture, the backdrop or ×) closes it; Esc is handled by <dialog>
+    dialog.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('close', () => {
+      img.removeAttribute('src');
+      opener?.focus({ preventScroll: true });
+    });
+  }
+</script>
