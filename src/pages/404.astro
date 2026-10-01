@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, url } from '../lib/site';
+---
+<Base title={`Page not found · ${SITE.name}`} noindex>
+  <Nav />
+  <main id="top">
+    <div class="wrap">
+      <div class="notfound">
+        <p class="eyebrow">404</p>
+        <h1>This page isn't here.</h1>
+        <p>The link may be old, or the page has moved.</p>
+        <a class="btn" href={url('')}>Back to the home page</a>
+      </div>
+      <Footer />
+    </div>
+  </main>
+</Base>

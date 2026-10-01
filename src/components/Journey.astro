@@ -1,0 +1,22 @@
+---
+import { journey } from '../data/journey';
+---
+<section id="journey">
+  <div class="sec-head">
+    <h2>Journey</h2>
+    <p>Six years from a computer engineering degree in Sriracha to AI engineering in Moscow.</p>
+  </div>
+  <div class="journey" tabindex="0" role="region" aria-label="Timeline, scroll sideways on small screens">
+    <ol>
+      {journey.map((s) => (
+        <li class:list={{ now: s.now }}>
+          <div class="yr">{s.year}</div>
+          <div class="pin"></div>
+          <h3>{s.title}</h3>
+          <p>{s.detail}</p>
+          <div class="place">{s.place}</div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

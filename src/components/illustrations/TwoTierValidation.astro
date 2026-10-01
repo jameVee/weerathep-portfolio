@@ -1,0 +1,22 @@
+---
+// Genotek card: agent answer → embedding similarity / LLM judge → regression gate.
+---
+<svg viewBox="0 0 380 240" role="img" aria-label="Diagram: agent answer checked by embedding similarity, then by an LLM judge, then pass or fail">
+  <rect x="10" y="94" width="86" height="52" rx="10" class="s-surf k-line" stroke-width="1.5"/>
+  <text x="53" y="116" text-anchor="middle" font-size="11" class="s-ink">Agent</text>
+  <text x="53" y="132" text-anchor="middle" font-size="11" class="s-muted">answer</text>
+  <path d="M96 120 H122" class="k-muted" stroke-width="1.5"/>
+  <rect x="122" y="54" width="110" height="52" rx="10" class="s-surf k-cool" stroke-width="1.5"/>
+  <text x="177" y="76" text-anchor="middle" font-size="10" class="s-cool">TIER 1</text>
+  <text x="177" y="92" text-anchor="middle" font-size="11" class="s-ink">embedding sim.</text>
+  <rect x="122" y="134" width="110" height="52" rx="10" class="s-surf k-cool" stroke-width="1.5"/>
+  <text x="177" y="156" text-anchor="middle" font-size="10" class="s-cool">TIER 2</text>
+  <text x="177" y="172" text-anchor="middle" font-size="11" class="s-ink">LLM-as-a-judge</text>
+  <path d="M122 120 H112 V80 H122 M112 120 V160 H122" fill="none" class="k-muted" stroke-width="1.5"/>
+  <path d="M232 80 H252 V160 H232 M252 120 H272" fill="none" class="k-muted" stroke-width="1.5"/>
+  <rect x="272" y="94" width="98" height="52" rx="10" class="s-accs k-acc" stroke-width="1.5"/>
+  <text x="321" y="116" text-anchor="middle" font-size="11" class="s-ink">regression</text>
+  <text x="321" y="132" text-anchor="middle" font-size="11" class="s-ink">gate</text>
+  <g class="s-acc"><rect x="272" y="166" width="10" height="10" rx="2"/><rect x="286" y="166" width="10" height="10" rx="2"/><rect x="300" y="166" width="10" height="10" rx="2"/><rect x="314" y="166" width="10" height="10" rx="2"/><rect x="328" y="166" width="10" height="10" rx="2"/><rect x="342" y="166" width="10" height="10" rx="2"/><rect x="356" y="166" width="10" height="10" rx="2"/></g>
+  <text x="321" y="196" text-anchor="middle" font-size="10" class="s-muted">68 test cases</text>
+</svg>

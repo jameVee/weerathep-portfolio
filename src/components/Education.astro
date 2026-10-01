@@ -1,0 +1,26 @@
+---
+import { education } from '../data/education';
+
+const pct = (v: number, s: number) => `${((v / s) * 100).toFixed(2)}%`;
+---
+<section id="education">
+  <div class="sec-head">
+    <h2>Education</h2>
+  </div>
+  <div class="edu">
+    {education.map((e) => (
+      <div class="school">
+        <div class="eyebrow mono">{e.dates}</div>
+        <div class="deg">{e.degree}</div>
+        <div class="where">{e.school}</div>
+        {e.gpa && (
+          <div class="gpa">
+            <span class="mono">{e.gpa.label ?? 'GPA'} {e.gpa.value.toFixed(2)} / {e.gpa.scale.toFixed(2)}</span>
+            <div class="bar" aria-hidden="true"><i style={`--fill:${pct(e.gpa.value, e.gpa.scale)}`}></i></div>
+          </div>
+        )}
+        <ul>{e.honours.map((h) => <li>{h}</li>)}</ul>
+      </div>
+    ))}
+  </div>
+</section>

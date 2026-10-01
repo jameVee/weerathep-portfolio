@@ -1,0 +1,12 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { award: CollectionEntry<'awards'> }
+const { award } = Astro.props;
+const d = award.data;
+const when = [d.detail, d.date].filter(Boolean).join(' · ');
+---
+<div class="award tone" data-accent={d.accent}>
+  <div class="medal" aria-hidden="true">{d.badge}</div>
+  <div><h3>{d.title}</h3><p>{d.place}</p><div class="when">{when}</div></div>
+</div>

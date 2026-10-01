@@ -1,0 +1,14 @@
+---
+import { beyond } from '../data/beyond';
+---
+<div>
+  <div class="sec-head"><h2>Beyond work</h2></div>
+  <div class="list">
+    {beyond.map((b) => (
+      <div class="item">
+        <div class="when">{b.when}</div>
+        <div><h3>{b.title}</h3><p>{b.text}</p></div>
+      </div>
+    ))}
+  </div>
+</div>

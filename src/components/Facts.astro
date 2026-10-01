@@ -1,0 +1,11 @@
+---
+import { facts } from '../data/facts';
+---
+<div class="facts" role="list">
+  {facts.map((f, i) => (
+    <div class="fact" role="listitem">
+      <div class:list={['n', { mono: i === 0 }]}>{f.value}{f.small && <small>{f.small}</small>}</div>
+      <p>{f.text}</p>
+    </div>
+  ))}
+</div>

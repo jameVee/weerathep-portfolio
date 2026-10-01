@@ -1,0 +1,73 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Facts from '../components/Facts.astro';
+import Journey from '../components/Journey.astro';
+import WorkCard from '../components/WorkCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import AwardCard from '../components/AwardCard.astro';
+import Education from '../components/Education.astro';
+import Beyond from '../components/Beyond.astro';
+import Skills from '../components/Skills.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+
+const byOrder = (a: { data: { order: number } }, b: { data: { order: number } }) => a.data.order - b.data.order;
+const work = (await getCollection('work')).sort(byOrder);
+const projects = (await getCollection('projects')).sort(byOrder);
+const awards = (await getCollection('awards')).sort(byOrder);
+---
+<Base>
+  <Nav onHome />
+  <main id="top">
+    <div class="wrap">
+      <Hero />
+      <Facts />
+      <Journey />
+
+      <section id="work">
+        <div class="sec-head">
+          <h2>Work experience</h2>
+          <p>Each role, with the problem, what I built and what changed. Open “Read more” for detail.</p>
+        </div>
+        <div class="work">
+          {work.map((job) => <WorkCard job={job} />)}
+        </div>
+      </section>
+
+      <section id="projects">
+        <div class="sec-head">
+          <h2>Projects</h2>
+          <p>Research and coursework at Skoltech.</p>
+        </div>
+        <div class="grid3">
+          {projects.map((project) => <ProjectCard project={project} />)}
+        </div>
+      </section>
+
+      <section id="awards">
+        <div class="sec-head">
+          <h2>Competitions &amp; hackathons</h2>
+          <p>Building under a deadline, with a team, in front of judges.</p>
+        </div>
+        <div class="awards">
+          {awards.map((award) => <AwardCard award={award} />)}
+        </div>
+      </section>
+
+      <Education />
+
+      <section id="beyond">
+        <div class="two">
+          <Beyond />
+          <Skills />
+        </div>
+      </section>
+
+      <Contact />
+      <Footer />
+    </div>
+  </main>
+</Base>

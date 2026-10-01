@@ -1,0 +1,35 @@
+---
+import { SITE, url } from '../lib/site';
+import PhotoFrame from './PhotoFrame.astro';
+import RouteMap from './illustrations/RouteMap.astro';
+---
+<header class="hero">
+  <div>
+    <p class="eyebrow">Engineer · Machine learning systems</p>
+    <h1>Weerathep <span class="last">Rattanajaratkul</span></h1>
+    <p class="lede">I build machine learning systems that leave the notebook and run in production: <strong>evaluation pipelines for medical AI agents</strong>, <strong>network analytics for a national telecom</strong>, and <strong>failure prediction for banking machines</strong>.</p>
+    <div class="status"><span class="dot" aria-hidden="true"></span>M.S. in AI &amp; ML at Skoltech, Moscow · graduating June 2027</div>
+    <div class="actions">
+      <a class="btn" href="#contact">Get in touch</a>
+      <a class="btn ghost" href={url(SITE.resume)} download={SITE.resumeDownloadName}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 19.5h16" fill="none" class="k-ink" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download CV
+      </a>
+      <a class="btn ghost" href={SITE.linkedin} target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="s-ink" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4v11H3v-11Zm6.5 0h3.8v1.5h.06c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.1v5.45h-4v-4.83c0-1.15-.02-2.63-1.6-2.63-1.6 0-1.85 1.25-1.85 2.55v4.91h-4v-11Z"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-side">
+    <PhotoFrame />
+    <figure class="route" aria-label="Route from Bangkok, Thailand to Moscow, Russia">
+      <RouteMap />
+      <div class="legend">
+        <div><b>Bangkok</b>Kasetsart · KBTG · AIS</div>
+        <div class="end"><b>Moscow</b>Skoltech · Genotek</div>
+      </div>
+    </figure>
+  </div>
+</header>

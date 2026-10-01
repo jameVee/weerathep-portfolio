@@ -1,0 +1,42 @@
+---
+/**
+ * The picture slot of a card. Shows a real photo when `image` is set (filling the same
+ * frame, with an accent bar along the bottom), otherwise the named SVG illustration.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { illustrations } from './index';
+import type { IllustrationName } from './names';
+
+interface Props {
+  class: string;
+  illustration?: IllustrationName | undefined;
+  image?: ImageMetadata | undefined;
+  imageAlt?: string | undefined;
+  /** `sizes` attribute for the responsive photo */
+  sizes: string;
+  /** candidate widths for the srcset (larger than the source are skipped) */
+  widths: number[];
+  /** above the fold: load immediately instead of lazily */
+  eager?: boolean;
+}
+const { class: cls, illustration, image, imageAlt = '', sizes, widths, eager = false } = Astro.props;
+const Illustration = illustration ? illustrations[illustration] : undefined;
+const usable = image ? widths.filter((w) => w <= image.width) : [];
+---
+<div class:list={[cls, { 'has-photo': image }]}>
+  {image ? (
+    <Image
+      src={image}
+      alt={imageAlt}
+      widths={usable.length ? usable : [image.width]}
+      sizes={sizes}
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : 'auto'}
+      decoding="async"
+    />
+  ) : (
+    Illustration && <Illustration />
+  )}
+  <slot />
+</div>

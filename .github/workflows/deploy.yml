@@ -1,0 +1,83 @@
+# Backup hosting on GitHub Pages.
+#
+# - Every push to main runs the build, so a broken build shows up in GitHub too.
+# - Deploying is opt-in, so it doesn't compete with Vercel:
+#     * run it by hand: Actions → "Deploy to GitHub Pages" → Run workflow, or
+#     * deploy on every push: Settings → Secrets and variables → Actions → Variables,
+#       add DEPLOY_PAGES = true
+#   Either way, first set Settings → Pages → Source to "GitHub Actions".
+#
+# The site URL and base path are worked out from the repository:
+#   <user>.github.io repo  → https://<user>.github.io/
+#   any other repo         → https://<user>.github.io/<repo>/
+# For a custom domain, add the repository variables SITE_URL (e.g. https://weerathep.dev)
+# and BASE_PATH (/) instead.
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Work out site URL and base path
+        id: paths
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+          BASE_PATH: ${{ vars.BASE_PATH }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+        run: |
+          owner=$(echo "$OWNER" | tr '[:upper:]' '[:lower:]')
+          repo=$(echo "$REPO" | tr '[:upper:]' '[:lower:]')
+          if [ -z "$SITE_URL" ]; then SITE_URL="https://${owner}.github.io"; fi
+          if [ -z "$BASE_PATH" ]; then
+            if [ "$repo" = "${owner}.github.io" ]; then BASE_PATH="/"; else BASE_PATH="/${REPO}"; fi
+          fi
+          echo "site=$SITE_URL" >> "$GITHUB_OUTPUT"
+          echo "base=$BASE_PATH" >> "$GITHUB_OUTPUT"
+          echo "Building for $SITE_URL$BASE_PATH"
+
+      - name: Build
+        run: npm run build
+        env:
+          SITE_URL: ${{ steps.paths.outputs.site }}
+          BASE_PATH: ${{ steps.paths.outputs.base }}
+          ASTRO_TELEMETRY_DISABLED: 1
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    if: github.event_name == 'workflow_dispatch' || vars.DEPLOY_PAGES == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,42 @@
+---
+import { SITE } from '../lib/site';
+---
+<section id="contact">
+  <div class="contact">
+    <div>
+      <h2>Let's talk.</h2>
+      <p>I'm finishing my master's at Skoltech in June 2027 and I'm interested in engineering roles where models have to work in production.</p>
+    </div>
+    <div class="rows">
+      <div class="crow"><span id="email">{SITE.email}</span><button type="button" id="copy" aria-live="polite">Copy</button></div>
+      <div class="crow"><span>{SITE.linkedinLabel}</span><a class="go" href={SITE.linkedin} target="_blank" rel="noopener" aria-label="Open LinkedIn profile">Open</a></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const btn = document.getElementById('copy');
+  const email = document.getElementById('email');
+  if (btn && email) {
+    btn.addEventListener('click', () => {
+      const text = email.textContent ?? '';
+      const done = () => {
+        btn.textContent = 'Copied';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 1600);
+      };
+      const fallback = () => {
+        const r = document.createRange();
+        r.selectNodeContents(email);
+        const s = getSelection();
+        s?.removeAllRanges();
+        s?.addRange(r);
+        btn.textContent = 'Selected';
+      };
+      try {
+        navigator.clipboard.writeText(text).then(done, fallback);
+      } catch {
+        fallback();
+      }
+    });
+  }
+</script>

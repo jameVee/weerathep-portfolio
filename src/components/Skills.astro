@@ -1,0 +1,12 @@
+---
+import { skills } from '../data/skills';
+---
+<div>
+  <div class="sec-head"><h2>Skills</h2></div>
+  {skills.map((g) => (
+    <div class="skillgroup">
+      <h3>{g.label}</h3>
+      <div class="skills">{g.items.map((s) => <span class="skill">{s}</span>)}</div>
+    </div>
+  ))}
+</div>

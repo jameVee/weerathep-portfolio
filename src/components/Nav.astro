@@ -1,0 +1,26 @@
+---
+import { SITE, url } from '../lib/site';
+
+interface Props {
+  /** On the home page the links are plain #anchors; elsewhere they point back to the home page. */
+  onHome?: boolean;
+}
+const { onHome = false } = Astro.props;
+const href = (id: string) => (onHome ? `#${id}` : url(`#${id}`));
+const links = [
+  ['journey', 'Journey'],
+  ['work', 'Work'],
+  ['projects', 'Projects'],
+  ['awards', 'Competitions'],
+  ['education', 'Education'],
+  ['contact', 'Contact'],
+] as const;
+---
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href={onHome ? '#top' : url('')}>{SITE.shortName}<span>.</span></a>
+    <ul>
+      {links.map(([id, label]) => <li><a href={href(id)}>{label}</a></li>)}
+    </ul>
+  </div>
+</nav>

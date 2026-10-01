@@ -1,0 +1,50 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import { formatRange } from '../lib/site';
+import Art from './illustrations/Art.astro';
+import SubIcon from './illustrations/SubIcon.astro';
+import Chips from './Chips.astro';
+
+interface Props { job: CollectionEntry<'work'> }
+const { job } = Astro.props;
+const d = job.data;
+const hasBody = Boolean(job.body?.trim());
+const { Content } = await render(job);
+---
+<article class="card tone" data-accent={d.accent} data-cool={d.cool}>
+  <Art
+    class="art"
+    illustration={d.illustration}
+    image={d.image}
+    imageAlt={d.imageAlt}
+    widths={[400, 600, 800, 1000]}
+    sizes="(max-width: 820px) calc(100vw - 40px), 430px"
+  >
+    <span class="tag">{d.artLabel.toUpperCase()}</span>
+  </Art>
+  <div class="body">
+    <div class="meta"><span class="co">{d.company}</span><span>{d.location}</span><span class="mono">{formatRange(d.start, d.end)}</span></div>
+    <h3>{d.title}</h3>
+    <p class="sum">{d.summary}</p>
+    {d.resultNumber && (
+      <div class="result"><span class="big">{d.resultNumber}</span><p>{d.resultText}</p></div>
+    )}
+    {d.subProjects.length > 0 && (
+      <div class="subs">
+        {d.subProjects.map((s) => (
+          <div class="sub">
+            <SubIcon name={s.icon} />
+            <b>{s.name}</b><span>{s.description}</span>
+          </div>
+        ))}
+      </div>
+    )}
+    {hasBody && (
+      <details>
+        <summary>Read more</summary>
+        <Content />
+      </details>
+    )}
+    <Chips tags={d.tags} />
+  </div>
+</article>

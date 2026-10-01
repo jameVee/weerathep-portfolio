@@ -1,0 +1,13 @@
+---
+// 28×28 icons for the work sub-project tiles (AIS card).
+import type { IconName } from './names';
+interface Props { name: IconName }
+const { name } = Astro.props;
+---
+<svg viewBox="0 0 28 28" aria-hidden="true">
+  {name === 'gauge' && <Fragment><path d="M4 20a10 10 0 0 1 20 0" fill="none" class="k-cool" stroke-width="2.2"/><path d="M14 20 L20 11" class="k-acc" stroke-width="2.2" stroke-linecap="round"/></Fragment>}
+  {name === 'outage' && <Fragment><path d="M2 12 L8 10 L12 20 L16 9 L26 11" fill="none" class="k-cool" stroke-width="2.2" stroke-linejoin="round"/><circle cx="12" cy="20" r="2.6" class="s-acc"/></Fragment>}
+  {name === 'churn' && <Fragment><path d="M4 9 H22 M18 5 L22 9 L18 13" fill="none" class="k-cool" stroke-width="2.2" stroke-linecap="round"/><path d="M24 19 H6 M10 15 L6 19 L10 23" fill="none" class="k-acc" stroke-width="2.2" stroke-linecap="round"/></Fragment>}
+  {name === 'coverage' && <Fragment><g class="s-line"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="11" y="3" width="6" height="6" rx="1"/><rect x="3" y="11" width="6" height="6" rx="1"/><rect x="19" y="19" width="6" height="6" rx="1"/><rect x="11" y="19" width="6" height="6" rx="1"/></g><g class="s-cool"><rect x="19" y="3" width="6" height="6" rx="1"/><rect x="11" y="11" width="6" height="6" rx="1"/><rect x="3" y="19" width="6" height="6" rx="1"/></g><rect x="19" y="11" width="6" height="6" rx="1" class="s-acc"/></Fragment>}
+  {name === 'pin' && <Fragment><path d="M14 25 C 8 18, 6 14, 6 11 a8 8 0 0 1 16 0 c0 3 -2 7 -8 14Z" fill="none" class="k-cool" stroke-width="2.2"/><circle cx="14" cy="11" r="3" class="s-acc"/></Fragment>}
+</svg>
